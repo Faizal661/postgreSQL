@@ -4,6 +4,8 @@ psql -h hostname -p port -U username -d database_name
 -- Create a database
 CREATE DATABASE my_database;
 
+
+
 -- Create a table
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -12,11 +14,22 @@ CREATE TABLE users (
     age INTEGER
 );
 
+ CREATE TABLE employees (
+ id BIGSERIAL primary key not null ,
+ name varchar(15) not null,
+ email varchar(50) not null unique,
+ date_of_birth date
+ );
+
+
+
 -- Insert data
 INSERT INTO users (name, email, age)
 VALUES ('Alice', 'alice@example.com', 30),
        ('Bob', 'bob@example.com', 25),
        ('Charlie', 'charlie@example.com', 35);
+
+
 
 -- Select all data
 SELECT * FROM users;
@@ -32,5 +45,61 @@ UPDATE users
 SET age = 32
 WHERE id = 1;
 
+
 -- Delete data
 DELETE FROM users WHERE id = 3;
+DELETE FROM employees WHERE id IN (5,6)
+
+
+
+-- ORDER BY (SORTING DATA)
+ SELECT * FROM employees ORDER BY age DESC;
+ SELECT * FROM employees ORDER BY age ASC;
+ SELECT * FROM employees ORDER BY age,email DESC;
+
+
+ --DISTINCT (for getting unique values in an field)
+ SELECT DISTINCT data_of_birth FROM employees;
+
+
+ --ALTER TABLE (To make changes in table)
+  ALTER TABLE employees ADD COLUMN age INTEGER;
+  ALTER TABLE employees RENAME COLUMN data_of_birth TO dob;
+
+  --FETCH data (Based on different conditions)
+   SELECT * FROM employees where gender='male';
+   SELECT * FROM employees where gender='male' AND age<30;
+   SELECT * FROM employees where gender='male' OR age>60;
+
+  --LIMIT &&  OFFSET
+    SELECT * FROM employees LIMIT 5; //  SELECT * FROM employees LIMIT(3); 
+    SELECT * FROM employees OFFSET(3);
+    SELECT * FROM employees OFFSET(2) LIMIT(2);
+    SELECT * FROM employees OFFSET(2) FETCH FIRST 2 ROWS ONLY;
+
+  --IN BETWEEN LIKE ILIKE
+    SELECT * FROM employees WHERE gender IN ('male','female');
+    SELECT * FROM employees WHERE age IN (22,52,17);
+
+    SELECT * FROM employees WHERE age BETWEEN 25 AND 50; // ALTERNATIVE FOR THIS (SELECT * FROM employees WHERE age<50 and age>25;)
+    SELECT * FROM employees WHERE age NOT BETWEEN 25 AND 50;
+
+    SELECT * FROM employees WHERE name LIKE 'f%'; //starting with f
+    SELECT * FROM employees WHERE name LIKE '%f'; //ending with f
+    SELECT * FROM employees WHERE name LIKE '%234%';//inside any matching pattern
+
+    SELECT * FROM employees WHERE name iLIKE '%f'; //ending with f and case insensitive
+
+  --GROUP BY 
+    SELECT gender FROM employees GROUP BY gender;
+    SELECT gender,count(*) FROM employees GROUP BY gender;
+    SELECT gender,count(*) FROM employees GROUP BY gender HAVING COUNT(*)>2;
+
+  --AGGREGATE FUNCTIONS (MAX, MIN , COUNT , AVG ,SUM ,ROUND)  
+    SELECT max(salary) FROM employees;
+    SELECT min(salary) FROM employees;
+    SELECT avg(salary) FROM employees;
+    SELECT round(avg(salary)) FROM employees;
+    SELECT sum(salary) FROM employees;
+    SELECT count(salary) FROM employees;
+
