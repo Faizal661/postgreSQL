@@ -1,0 +1,9 @@
+ --ARITHMATIC OPERATIONS 
+
+    SELECT 2+5;
+    SELECT 2-5;
+    SELECT 2*5;
+    SELECT 2/5;
+    SELECT 2%5;
+    
+    SELECT name,salary,(salary/10) as INCOMETAX FROM employees; 

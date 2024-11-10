@@ -1,0 +1,43 @@
+//ADD FORIEGN KEY when creating table
+    CREATE TABLE orders (
+    order_id SERIAL PRIMARY KEY,
+    customer_id INTEGER REFERENCES customers(id),
+    product_name TEXT,
+    order_date DATE
+    );
+
+
+
+
+//ADD FORIEGN KEY after creating table
+        company=# ALTER TABLE products
+        company-# ADD CONSTRAINT fk_category_id
+        company-# FOREIGN KEY (category_id)
+        company-# REFERENCES categories(category_id);
+
+
+// INNER JOINS  (ONLY JOINS WITH THE COMMON MATCHING ROWS )
+        SELECT * FROM products INNER JOIN categories ON products.category_id=categories.category_id;
+        SELECT * FROM products p INNER JOIN categories c ON p.category_id=c.category_id;
+
+        SELECT p.product_id,c.category_id,p.product_name,p.price,c.category_name FROM products p INNER JOIN categories c ON p.category_id=c.category_id;
+
+
+//  LEFT JOIN (GET ALL THE ROWS FROM LEFT TABLE AND ONLY MATCHING ROWS FROM RIGHT TABLE)   
+        SELECT p.product_id,c.category_id,p.product_name,p.price,c.category_name FROM products p LEFT JOIN categories c ON p.category_id=c.category_id;
+
+
+//  RIGHT JOIN (GET ALL THE ROWS FROM RIGHT TABLE AND ONLY MATCHING ROWS FROM LEFT TABLE)      
+        SELECT p.product_id,c.category_id,p.product_name,p.price,c.category_name FROM products p RIGHT JOIN categories c ON p.category_id=c.category_id;
+
+
+//  FULL OUTER JOIN (GET ALL RECORDS FROM BOTH TABLES )
+        SELECT p.product_id,c.category_id,p.product_name,p.price,c.category_name FROM products p FULL OUTER JOIN categories c ON p.category_id=c.category_id;
+
+//  UNION  (Get all records with same field name and data types from two tables and with unique values)
+        SELECT name,email,gender FROM students UNION SELECT name,email,gender FROM employees ORDER BY name;
+
+//  UNION ALL (Get all records with same field name and data types from two tables)
+        SELECT name,email,gender FROM students UNION ALL SELECT name,email,gender FROM employees ORDER BY name;
+
+

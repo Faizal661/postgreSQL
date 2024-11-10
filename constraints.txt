@@ -1,0 +1,32 @@
+
+CONSTRAINTS (NOT NULL ,UNIQUE , PRIMARY KEY , FOREIGN KEY , CHECK ,DEFAULT )   
+        SELECT COUNT(*) FROM products WHERE stock IS NULL;       // RETURN THE NUMBER OF NULL COLUMNS IN THAT FIELD 
+        SELECT COUNT(*) FROM products WHERE stock IS NOT NULL;   // RETURN THE NUMBER OF NOT NULL COLUMNS IN THAT FIELD 
+
+     //ADDING FK WHEN CREATING TABLE
+        CREATE TABLE orders (
+          order_id SERIAL PRIMARY KEY,  // <===  PK
+          customer_id INTEGER REFERENCES customers(id), // <===  FK
+          product_name TEXT NOT NULL, // <=== NOTNULL
+          order_date DATE DEFAULT CURRENT_TIMESTAMP ,  // <===  DEFAULT
+          status varchar(10) CHECK (status = 'pending' OR status='shipped')    // <===  CHECK
+        );
+
+
+
+     // ADD CONSTRAINTS AFTER TABLE CREATIONS
+
+        ALTER TABLE employees ADD CONSTRAINT employee_gender_check CHECK (gender='Male' OR gender='Female');
+        ALTER TABLE products ADD CONSTRAINTS products_unique_productname UNIQUE (product_name);
+        ALTER TABLE employees ALTER COLUMN salary SET NOT NULL;
+        ALTER TABLE employees ALTER COLUMN gender SET DEFAULT ('not specified');
+
+     //ADD FORIEGN KEY
+        company=# ALTER TABLE products
+        company-# ADD CONSTRAINT fk_category_id
+        company-# FOREIGN KEY (category_id)
+        company-# REFERENCES categories(category_id);
+
+
+     // Drop CONSTRAINT
+        ALTER TABLE employees DROP CONSTRAINT employee_gender_check;

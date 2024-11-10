@@ -1,0 +1,8 @@
+
+-- LIKE  , iLIKE  
+
+    SELECT * FROM employees WHERE name LIKE 'f%';     //starting with f
+    SELECT * FROM employees WHERE name LIKE '%f';     //ending with f
+    SELECT * FROM employees WHERE name LIKE '%234%';  //inside any matching pattern
+
+    SELECT * FROM employees WHERE name iLIKE '%f';    //ending with f and case insensitive

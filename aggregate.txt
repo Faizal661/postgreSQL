@@ -1,0 +1,8 @@
+  --AGGREGATE FUNCTIONS (MAX, MIN , COUNT , AVG ,SUM ,ROUND)  
+  
+    SELECT max(salary) FROM employees;
+    SELECT min(salary) FROM employees;
+    SELECT avg(salary) FROM employees;
+    SELECT round(avg(salary)) FROM employees;
+    SELECT sum(salary) FROM employees;
+    SELECT count(salary) FROM employees;

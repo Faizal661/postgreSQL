@@ -1,10 +1,13 @@
 -- Connect to the database
 psql -h hostname -p port -U username -d database_name
 
+\l                //List all the db names
+\c database_name  //Connect to db
+\d , \dt          //List all relations in that db
+\d table_name     //Give all information about the table
+
 -- Create a database
 CREATE DATABASE my_database;
-
-
 
 -- Create a table
 CREATE TABLE users (
@@ -41,35 +44,38 @@ SELECT name, age FROM users;
 SELECT * FROM users WHERE age > 30;
 
 -- Update data
-UPDATE users
-SET age = 32
-WHERE id = 1;
+UPDATE users SET age = 32 WHERE id = 1;
+UPDATE products SET stock =0 WHERE stock IS NULL;
+UPDATE products SET stock =NULL WHERE stock=0;
+UPDATE employees SET name='doe',email='doe@gmail.com',dob='1995-05-12' WHERE id=4;
+
+--UPSERT DATA (WHEN CONFLICT ARRIVES)  // 1.DO NOTHING  2.DO UPDATE
+1.DO NOTHING
+  INSERT INTO employees (name,email,dob,age,gender,salary) VALUES ('doe','doe@gmail.com','1992-05-12',32,'Male',67000) ON CONFLICT (name) DO NOTHING;
+2.DO UPDATE
+  INSERT INTO employees (name,email,dob,age,gender,salary) VALUES ('doe','doe@gmail.com','1992-05-12',32,'Male',67000) ON CONFLICT (name) DO UPDATE SET salary=EXCLUDED.salary,dob=EXCLUDED.dob;  
 
 
 -- Delete data
+DELETE FROM users ;   ///  DELETE ALL THE DATA IN THAT TABLE IF NOT USED A WHERE CONDITION
 DELETE FROM users WHERE id = 3;
-DELETE FROM employees WHERE id IN (5,6)
+DELETE FROM employees WHERE id IN (5,6);
 
 
 
--- ORDER BY (SORTING DATA)
- SELECT * FROM employees ORDER BY age DESC;
- SELECT * FROM employees ORDER BY age ASC;
- SELECT * FROM employees ORDER BY age,email DESC;
+
+  --DISTINCT (for getting unique values in an field)
+    SELECT DISTINCT data_of_birth FROM employees;
 
 
- --DISTINCT (for getting unique values in an field)
- SELECT DISTINCT data_of_birth FROM employees;
-
-
- --ALTER TABLE (To make changes in table)
-  ALTER TABLE employees ADD COLUMN age INTEGER;
-  ALTER TABLE employees RENAME COLUMN data_of_birth TO dob;
+  --ALTER TABLE (To make changes in table)
+    ALTER TABLE employees ADD COLUMN age INTEGER;
+    ALTER TABLE employees RENAME COLUMN data_of_birth TO dob;
 
   --FETCH data (Based on different conditions)
-   SELECT * FROM employees where gender='male';
-   SELECT * FROM employees where gender='male' AND age<30;
-   SELECT * FROM employees where gender='male' OR age>60;
+    SELECT * FROM employees where gender='male';
+    SELECT * FROM employees where gender='male' AND age<30;
+    SELECT * FROM employees where gender='male' OR age>60;
 
   --LIMIT &&  OFFSET
     SELECT * FROM employees LIMIT 5; //  SELECT * FROM employees LIMIT(3); 
@@ -81,25 +87,35 @@ DELETE FROM employees WHERE id IN (5,6)
     SELECT * FROM employees WHERE gender IN ('male','female');
     SELECT * FROM employees WHERE age IN (22,52,17);
 
-    SELECT * FROM employees WHERE age BETWEEN 25 AND 50; // ALTERNATIVE FOR THIS (SELECT * FROM employees WHERE age<50 and age>25;)
+    SELECT * FROM employees WHERE age BETWEEN 25 AND 50;      // ALTERNATIVE FOR THIS (SELECT * FROM employees WHERE age<50 and age>25;)
     SELECT * FROM employees WHERE age NOT BETWEEN 25 AND 50;
 
-    SELECT * FROM employees WHERE name LIKE 'f%'; //starting with f
-    SELECT * FROM employees WHERE name LIKE '%f'; //ending with f
-    SELECT * FROM employees WHERE name LIKE '%234%';//inside any matching pattern
 
-    SELECT * FROM employees WHERE name iLIKE '%f'; //ending with f and case insensitive
 
-  --GROUP BY 
-    SELECT gender FROM employees GROUP BY gender;
-    SELECT gender,count(*) FROM employees GROUP BY gender;
-    SELECT gender,count(*) FROM employees GROUP BY gender HAVING COUNT(*)>2;
+  -- COALESCE KEYWORD (TO SHOW DEFAULT VALUE IN A NULL PLACE) 
+    SELECT product_name, price ,COALESCE(stock,0)FROM products;
 
-  --AGGREGATE FUNCTIONS (MAX, MIN , COUNT , AVG ,SUM ,ROUND)  
-    SELECT max(salary) FROM employees;
-    SELECT min(salary) FROM employees;
-    SELECT avg(salary) FROM employees;
-    SELECT round(avg(salary)) FROM employees;
-    SELECT sum(salary) FROM employees;
-    SELECT count(salary) FROM employees;
+
+
+  -- CASE STATEMENT IN QUERY ()
+      company=# SELECT name,age,
+      company-# CASE
+      company-# WHEN age <20 THEN 'under 20'
+      company-# WHEN age BETWEEN 20 AND 30 THEN 'BETWEEN 20 & 30'
+      company-# WHEN age BETWEEN 30 AND 40 THEN 'BETWEEN 30 & 40'
+      company-# ELSE 'Above 40'
+      company-# END as AGE_CATEGORY
+      company-# FROM employees;
+
+        name   | age |  age_category
+      ----------+-----+-----------------
+      faizal23 |  34 | BETWEEN 30 & 40
+      faizal2  |  22 | BETWEEN 20 & 30
+      faizal1  |  28 | BETWEEN 20 & 30
+      user1    |  24 | BETWEEN 20 & 30
+      user2    |  24 | BETWEEN 20 & 30
+      john     |  17 | under 20
+      doe      |  52 | Above 40
+      (7 rows)
+
 

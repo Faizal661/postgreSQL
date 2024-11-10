@@ -1,0 +1,12 @@
+--GROUP BY 
+
+    SELECT gender FROM employees GROUP BY gender;
+    SELECT gender,count(*) FROM employees GROUP BY gender;
+    SELECT gender,count(*) FROM employees GROUP BY gender HAVING COUNT(*)>2;
+
+
+-- ORDER BY (SORTING DATA)
+
+    SELECT * FROM employees ORDER BY age DESC;
+    SELECT * FROM employees ORDER BY age ASC;
+    SELECT * FROM employees ORDER BY age,email DESC;
